@@ -32,7 +32,10 @@ Spam messages and phishing attempts via SMS are a common nuisance and security r
 ```text
 ├── SMSSpamCollection     # SMS spam research corpus (5,574 tagged messages)
 ├── readme                 # Original dataset documentation & corpus statistics
-├── spam_detector_real.py  # Model training, evaluation, and inference script
+├── spam_detector_real.py  # Model training, evaluation, and serialization script
+├── predict.py             # Lightweight inference script (runs without dataset!)
+├── spam_model.pkl         # Saved MultinomialNB trained model
+├── vectorizer.pkl         # Saved CountVectorizer vocabulary
 ├── requirements.txt       # Project dependencies
 ├── .gitignore             # Ignored temporary files & virtual environments
 └── README.md              # Project documentation
@@ -66,18 +69,30 @@ Spam messages and phishing attempts via SMS are a common nuisance and security r
 
 ## 🏃 Usage
 
-Run the training and evaluation script:
+### 1. Training the Model
+Train the classifier, evaluate accuracy, and save `spam_model.pkl` and `vectorizer.pkl`:
 ```bash
 python spam_detector_real.py
 ```
 
-### Testing Custom Messages
-You can test custom messages inside `spam_detector_real.py`:
-```python
-sample = ["Congratulations! You’ve been selected for a FREE MacBook Pro. Click here to claim your prize"]
-sample_vector = vectorizer.transform(sample)
-prediction = model.predict(sample_vector)
-print("Result:", "Spam" if prediction[0] == 1 else "Ham")
+### 2. Making Predictions (No Dataset Required!)
+Use `predict.py` to classify messages directly:
+
+**Via Command-Line Argument:**
+```bash
+python predict.py "Congratulations! You have won a $1,000 Walmart Gift Card."
+```
+
+**Interactive Terminal Mode:**
+```bash
+python predict.py
+```
+```text
+Enter SMS: Urgent! Please call our customer service to claim your reward.
+-> Result: [SPAM] (99.85% confidence)
+
+Enter SMS: Are we still meeting for lunch today?
+-> Result: [HAM] (99.98% confidence)
 ```
 
 ---

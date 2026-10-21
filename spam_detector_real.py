@@ -3,6 +3,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.feature_extraction.text import CountVectorizer
 from sklearn.naive_bayes import MultinomialNB
 from sklearn.metrics import classification_report, accuracy_score
+import joblib
 
 # Load real dataset
 df = pd.read_csv("SMSSpamCollection", sep='\t', names=['label', 'text'])
@@ -21,6 +22,11 @@ X_test_vectors = vectorizer.transform(X_test)
 # Train model
 model = MultinomialNB()
 model.fit(X_train_vectors, y_train)
+
+# Save model and vectorizer to disk
+joblib.dump(model, "spam_model.pkl")
+joblib.dump(vectorizer, "vectorizer.pkl")
+print("Saved model to 'spam_model.pkl' and vectorizer to 'vectorizer.pkl'!")
 
 # Test
 predictions = model.predict(X_test_vectors)
